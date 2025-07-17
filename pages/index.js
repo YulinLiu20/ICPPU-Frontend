@@ -7,15 +7,23 @@ export default function Home() {
   const [data, setData] = useState(null)
 
   useEffect(() => {
-    fetch("https://icppu-production.up.railway.app/data") // 替换成你真实 API 地址
-      .then(res => res.json())
+    console.log("🔥 useEffect triggered")
+    fetch("https://icppu-production.up.railway.app/data")
+      .then(res => {
+        console.log("📦 Fetch status:", res.status)
+        return res.json()
+      })
       .then(json => {
+        console.log("📈 Received JSON:", json)
         const formatted = json.prices.map((price, i) => ({
           day: i + 1,
-          price: price,
+          price,
           volatility: json.rolling_vols[i]
         }))
         setData(formatted)
+      })
+      .catch(err => {
+        console.error("❌ Fetch failed:", err)
       })
   }, [])
 
